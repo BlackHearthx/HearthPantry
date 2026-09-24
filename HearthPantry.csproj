@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="Environment.props" Condition="Exists('Environment.props')" />
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>HearthPantry</AssemblyName>
+    <RootNamespace>HearthPantry</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <DebugType>portable</DebugType>
+    <Version>1.0.1</Version>
+    <Authors>blackhearthx</Authors>
+    <Description>Smart homestead pantry: auto-refill food, fill empty slots, workbench/boat pause, and fight meads.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JotunnLib" Version="2.29.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Translations\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="DeployToValheim" AfterTargets="Build">
+    <MakeDir Directories="$(MOD_DEPLOYPATH)" Condition="'$(MOD_DEPLOYPATH)' != ''" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MOD_DEPLOYPATH)" Condition="'$(MOD_DEPLOYPATH)' != '' And Exists('$(TargetPath)')" />
+    <ItemGroup Condition="'$(MOD_DEPLOYPATH)' != ''">
+      <_HpLocFiles Include="$(OutputPath)Translations\**\*.json" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(_HpLocFiles)"
+      DestinationFiles="@(_HpLocFiles->'$(MOD_DEPLOYPATH)\Translations\%(RecursiveDir)%(Filename)%(Extension)')"
+      Condition="'$(MOD_DEPLOYPATH)' != '' And '@(_HpLocFiles)' != ''"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- dotnet build HearthPantry.csproj -c Release -t:Package -->
+  <Target Name="Package" DependsOnTargets="Build">
+    <PropertyGroup>
+      <_HpStage>$(MSBuildProjectDirectory)\dist\stage</_HpStage>
+      <_HpZip>$(MSBuildProjectDirectory)\dist\HearthPantry-$(Version).zip</_HpZip>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(_HpStage)" />
+    <MakeDir Directories="$(_HpStage)\plugins" />
+
+    <Copy SourceFiles="manifest.json;README.md;CHANGELOG.md;icon.png" DestinationFolder="$(_HpStage)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(_HpStage)\plugins" />
+
+    <ItemGroup>
+      <_HpPkgLoc Include="$(OutputPath)Translations\**\*.json" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(_HpPkgLoc)"
+      DestinationFiles="@(_HpPkgLoc->'$(_HpStage)\plugins\Translations\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <Delete Files="$(_HpZip)" />
+    <ZipDirectory SourceDirectory="$(_HpStage)" DestinationFile="$(_HpZip)" />
+    <RemoveDir Directories="$(_HpStage)" />
+    <Message Importance="high" Text="Thunderstore package ready: $(_HpZip)" />
+  </Target>
+</Project>

@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} is bijna op",
+  "hearthpantry_expiry_mins": "{0} wordt zwak — nog ongeveer {1} min",
+  "hearthpantry_reeaten": "Nog {0}",
+  "hearthpantry_ate_fill": "{0} uit de voorraadkast gegeten",
+  "hearthpantry_out": "Geen {0} meer",
+  "hearthpantry_last": "Laatste {0} in de tas",
+  "hearthpantry_low": "Nog maar {0} {1}",
+  "hearthpantry_drank": "{0} gedronken",
+  "hearthpantry_toggle_on": "De voorraadkast houdt je eten in de gaten",
+  "hearthpantry_toggle_off": "Voorraadkast gepauzeerd — eet wanneer je wilt"
+}

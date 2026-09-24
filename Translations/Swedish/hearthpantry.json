@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} tar snart slut",
+  "hearthpantry_expiry_mins": "{0} blir svag — ungefär {1} min kvar",
+  "hearthpantry_reeaten": "En {0} till",
+  "hearthpantry_ate_fill": "Åt {0} från skafferiet",
+  "hearthpantry_out": "Slut på {0}",
+  "hearthpantry_last": "Sista {0} i väskan",
+  "hearthpantry_low": "Bara {0} {1} kvar",
+  "hearthpantry_drank": "Drack {0}",
+  "hearthpantry_toggle_on": "Skafferiet håller koll på maten",
+  "hearthpantry_toggle_off": "Skafferiet pausat — ät när du vill"
+}

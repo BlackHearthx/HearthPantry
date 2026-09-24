@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} почти закончилась",
+  "hearthpantry_expiry_mins": "{0} слабеет — ещё около {1} мин",
+  "hearthpantry_reeaten": "Ещё {0}",
+  "hearthpantry_ate_fill": "Съел {0} из кладовой",
+  "hearthpantry_out": "{0} закончилась",
+  "hearthpantry_last": "Последний {0} в сумке",
+  "hearthpantry_low": "Осталось только {0} {1}",
+  "hearthpantry_drank": "Выпил {0}",
+  "hearthpantry_toggle_on": "Кладовая следит за едой",
+  "hearthpantry_toggle_off": "Кладовая на паузе — ешь когда хочешь"
+}

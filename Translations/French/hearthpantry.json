@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} est presque fini",
+  "hearthpantry_expiry_mins": "{0} faiblit — encore environ {1} min",
+  "hearthpantry_reeaten": "Encore un {0}",
+  "hearthpantry_ate_fill": "A mangé {0} du garde-manger",
+  "hearthpantry_out": "Plus de {0}",
+  "hearthpantry_last": "Dernier {0} dans le sac",
+  "hearthpantry_low": "Plus que {0} {1}",
+  "hearthpantry_drank": "A bu {0}",
+  "hearthpantry_toggle_on": "Le garde-manger veille sur la nourriture",
+  "hearthpantry_toggle_off": "Garde-manger en pause — mange quand tu veux"
+}

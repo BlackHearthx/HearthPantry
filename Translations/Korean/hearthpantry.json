@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0}이(가) 거의 끝났어요",
+  "hearthpantry_expiry_mins": "{0}이(가) 약해졌어요 — 약 {1}분 남음",
+  "hearthpantry_reeaten": "{0}을(를) 또 먹었어요",
+  "hearthpantry_ate_fill": "식료품 창고에서 {0}을(를) 먹었어요",
+  "hearthpantry_out": "{0}이(가) 없어요",
+  "hearthpantry_last": "가방에 {0} 하나 남았어요",
+  "hearthpantry_low": "{1}이(가) {0}개만 남았어요",
+  "hearthpantry_drank": "{0}을(를) 마셨어요",
+  "hearthpantry_toggle_on": "식료품 창고가 음식을 지켜보고 있어요",
+  "hearthpantry_toggle_off": "식료품 창고 일시정지 — 원할 때 드세요"
+}

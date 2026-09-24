@@ -1,0 +1,38 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "BlackHearthx"
+name = "HearthPantry"
+versionNumber = "1.0.1"
+description = "Your pantry keeps three meals running, fills empty slots, pauses timers at the workbench or on a boat, and drinks meads when a fight gets ugly."
+websiteUrl = "https://github.com/BlackHearthx/HearthPantry"
+containsNsfwContent = false
+
+[package.dependencies]
+"denikson-BepInExPack_Valheim" = "5.4.2200"
+"ValheimModding-Jotunn" = "2.29.2"
+
+[build]
+icon = "./icon.png"
+readme = "./README.md"
+outdir = "./dist/tcli"
+
+[[build.copy]]
+source = "./bin/Release/HearthPantry.dll"
+target = "./"
+
+[[build.copy]]
+source = "./bin/Release/Translations"
+target = "./Translations"
+
+[[build.copy]]
+source = "./CHANGELOG.md"
+target = "./"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = ["valheim"]
+
+[publish.categories]
+valheim = ["mods"]

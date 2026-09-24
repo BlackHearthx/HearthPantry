@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0}快没了",
+  "hearthpantry_expiry_mins": "{0}变弱了——大约还剩{1}分钟",
+  "hearthpantry_reeaten": "又吃了一份{0}",
+  "hearthpantry_ate_fill": "从储藏室吃了{0}",
+  "hearthpantry_out": "{0}用完了",
+  "hearthpantry_last": "包里最后一份{0}",
+  "hearthpantry_low": "只剩{0}份{1}",
+  "hearthpantry_drank": "喝了{0}",
+  "hearthpantry_toggle_on": "储藏室正在照看你的食物",
+  "hearthpantry_toggle_off": "储藏室已暂停——想吃再吃"
+}

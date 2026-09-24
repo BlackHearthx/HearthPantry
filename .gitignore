@@ -1,0 +1,27 @@
+## Build
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+
+## NuGet
+*.nupkg
+**/packages/*
+
+## Pack output
+dist/
+
+## Local machine paths (Valheim install / Mod tests deploy)
+Environment.props
+
+## OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+*.log

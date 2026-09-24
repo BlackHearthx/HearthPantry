@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} is almost gone",
+  "hearthpantry_expiry_mins": "{0} is running low — about {1} min left",
+  "hearthpantry_reeaten": "Had another {0}",
+  "hearthpantry_ate_fill": "Ate {0} from the pantry",
+  "hearthpantry_out": "Out of {0}",
+  "hearthpantry_last": "Last {0} in the bag",
+  "hearthpantry_low": "Only {0} {1} left",
+  "hearthpantry_drank": "Drank {0}",
+  "hearthpantry_toggle_on": "Pantry is watching your food",
+  "hearthpantry_toggle_off": "Pantry paused — eat when you want"
+}

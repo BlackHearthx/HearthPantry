@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} ist fast weg",
+  "hearthpantry_expiry_mins": "{0} wird schwach — noch etwa {1} Min",
+  "hearthpantry_reeaten": "Noch einmal {0}",
+  "hearthpantry_ate_fill": "{0} aus der Vorratskammer gegessen",
+  "hearthpantry_out": "Kein {0} mehr",
+  "hearthpantry_last": "Letztes {0} im Beutel",
+  "hearthpantry_low": "Nur noch {0} {1}",
+  "hearthpantry_drank": "{0} getrunken",
+  "hearthpantry_toggle_on": "Die Vorratskammer achtet aufs Essen",
+  "hearthpantry_toggle_off": "Vorratskammer pausiert — iss, wann du willst"
+}

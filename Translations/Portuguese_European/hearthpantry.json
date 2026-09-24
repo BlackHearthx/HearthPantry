@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} está quase a acabar",
+  "hearthpantry_expiry_mins": "{0} está fraco — uns {1} min",
+  "hearthpantry_reeaten": "Mais um {0}",
+  "hearthpantry_ate_fill": "Comeu {0} da despensa",
+  "hearthpantry_out": "Acabou o {0}",
+  "hearthpantry_last": "Último {0} no saco",
+  "hearthpantry_low": "Só {0} {1} a sobrar",
+  "hearthpantry_drank": "Bebeu {0}",
+  "hearthpantry_toggle_on": "A despensa está a cuidar da comida",
+  "hearthpantry_toggle_off": "Despensa em pausa — come quando quiseres"
+}

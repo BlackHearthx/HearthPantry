@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} prawie się skończyło",
+  "hearthpantry_expiry_mins": "{0} słabnie — jeszcze ok. {1} min",
+  "hearthpantry_reeaten": "Jeszcze {0}",
+  "hearthpantry_ate_fill": "Zjadł {0} ze spiżarni",
+  "hearthpantry_out": "Skończyło się {0}",
+  "hearthpantry_last": "Ostatnie {0} w torbie",
+  "hearthpantry_low": "Zostało tylko {0} {1}",
+  "hearthpantry_drank": "Wypił {0}",
+  "hearthpantry_toggle_on": "Spiżarnia pilnuje jedzenia",
+  "hearthpantry_toggle_off": "Spiżarnia wstrzymana — jedz kiedy chcesz"
+}

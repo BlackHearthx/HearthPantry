@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} neredeyse bitti",
+  "hearthpantry_expiry_mins": "{0} zayıflıyor — yaklaşık {1} dk kaldı",
+  "hearthpantry_reeaten": "Bir {0} daha",
+  "hearthpantry_ate_fill": "Kilerden {0} yedi",
+  "hearthpantry_out": "{0} bitti",
+  "hearthpantry_last": "Çantadaki son {0}",
+  "hearthpantry_low": "Sadece {0} {1} kaldı",
+  "hearthpantry_drank": "{0} içti",
+  "hearthpantry_toggle_on": "Kiler yemeğini izliyor",
+  "hearthpantry_toggle_off": "Kiler duraklatıldı — istediğin zaman ye"
+}

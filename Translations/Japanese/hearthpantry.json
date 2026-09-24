@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0}がもうすぐ切れる",
+  "hearthpantry_expiry_mins": "{0}が弱くなってきた——あと約{1}分",
+  "hearthpantry_reeaten": "{0}をもう一つ",
+  "hearthpantry_ate_fill": "パントリーから{0}を食べた",
+  "hearthpantry_out": "{0}がなくなった",
+  "hearthpantry_last": "袋の中の最後の{0}",
+  "hearthpantry_low": "{1}が{0}個しか残っていない",
+  "hearthpantry_drank": "{0}を飲んだ",
+  "hearthpantry_toggle_on": "パントリーが食事を見守っている",
+  "hearthpantry_toggle_off": "パントリー一時停止——好きなときに食べて"
+}

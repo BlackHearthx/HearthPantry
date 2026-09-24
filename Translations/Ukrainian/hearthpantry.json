@@ -1,0 +1,12 @@
+{
+  "hearthpantry_expiry_almost": "{0} майже закінчилась",
+  "hearthpantry_expiry_mins": "{0} слабшає — ще близько {1} хв",
+  "hearthpantry_reeaten": "Ще {0}",
+  "hearthpantry_ate_fill": "З’їв {0} з комори",
+  "hearthpantry_out": "{0} закінчилась",
+  "hearthpantry_last": "Останній {0} у торбі",
+  "hearthpantry_low": "Лишилось лише {0} {1}",
+  "hearthpantry_drank": "Випив {0}",
+  "hearthpantry_toggle_on": "Комора стежить за їжею",
+  "hearthpantry_toggle_off": "Комора на паузі — їж коли хочеш"
+}

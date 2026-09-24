@@ -1,0 +1,37 @@
+---
+description: Humanize all player-facing and chat copy — prose over dash lists
+alwaysApply: true
+---
+
+# Humanize copy
+
+Write like a person talking, not like a changelog or a feature matrix.
+
+## Applies to
+
+Chat replies, README / Thunderstore / store pages, HUD messages, tooltips, hover text, config descriptions, menu labels, notifications, and any other text a player or Sergio will read.
+
+## Do
+
+- Prefer short prose and natural sentences.
+- Match the product voice (BlackHearthx = homestead hearth).
+- One good table is fine for controls or compat.
+- In chat: answer like a colleague — direct, few bullets.
+
+## Don't
+
+- Don't open every line with `-` / `•` when prose would do.
+- Don't ship robot lines: "X automatically consumed", "Feature enabled", "Low supply: N remaining".
+- Don't use patch-note or agent-notes tone for players.
+
+## Examples
+
+```
+Bad:  Cooked meat automatically re-eaten
+Good: Had another Cooked meat
+
+Bad:  Low supply: 1 Boar jerky remaining
+Good: Last Boar jerky in the bag
+```
+
+If it sounds like a manual when read aloud, rewrite it.
