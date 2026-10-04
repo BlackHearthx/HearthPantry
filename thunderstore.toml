@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "BlackHearthx"
 name = "HearthPantry"
-versionNumber = "1.0.1"
+versionNumber = "1.0.3"
 description = "Your pantry keeps three meals running, fills empty slots, pauses timers at the workbench or on a boat, and drinks meads when a fight gets ugly."
 websiteUrl = "https://github.com/BlackHearthx/HearthPantry"
 containsNsfwContent = false

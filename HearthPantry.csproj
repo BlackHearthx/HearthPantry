@@ -13,12 +13,13 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <DebugType>portable</DebugType>
-    <Version>1.0.1</Version>
+    <Version>1.0.3</Version>
     <Authors>blackhearthx</Authors>
     <Description>Smart homestead pantry: auto-refill food, fill empty slots, workbench/boat pause, and fight meads.</Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="tests\**\*.cs" />
     <PackageReference Include="JotunnLib" Version="2.29.2" />
   </ItemGroup>
 

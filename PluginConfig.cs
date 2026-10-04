@@ -25,6 +25,7 @@ namespace HearthPantry
         public static ConfigEntry<int> ScoreStaminaWeight;
         public static ConfigEntry<int> ScoreDurationWeight;
         public static ConfigEntry<int> ScoreRegenWeight;
+        public static ConfigEntry<int> ScoreEitrWeight;
 
         public static ConfigEntry<bool> AutoHealthMead;
         public static ConfigEntry<int> HealthMeadThreshold;
@@ -92,6 +93,8 @@ namespace HearthPantry
                 new ConfigDescription("How much long burn time matters.", new AcceptableValueRange<int>(0, 100)));
             ScoreRegenWeight = config.Bind("Pantry Scoring", "04. Regen Weight", 50,
                 new ConfigDescription("How much regen matters.", new AcceptableValueRange<int>(0, 100)));
+            ScoreEitrWeight = config.Bind("Pantry Scoring", "05. Eitr Weight", 50,
+                new ConfigDescription("How much eitr matters when choosing a meal. Set to zero if you do not use magic.", new AcceptableValueRange<int>(0, 100)));
 
             AutoHealthMead = config.Bind("Health Mead", "01. Auto Health Mead", true,
                 "Drinks a healing mead when you are hurt badly enough.");

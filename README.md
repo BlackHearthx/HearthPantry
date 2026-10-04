@@ -21,6 +21,10 @@ the gap with the best match from your inventory. A short line on screen tells
 you when it ate, when a dish is running low, and when the stack in your bag is
 almost gone.
 
+Auto-eating pauses while vomiting (for example after eating Bukeperries), then
+resumes when the effect ends. The pantry never automatically selects food that
+applies a vomiting effect.
+
 At the workbench and on a boat the countdown holds still so crafting and sailing
 do not burn through dinner. Healing and stamina from the meal keep working;
 only the timer pauses.
@@ -64,6 +68,9 @@ quando o estoque está baixo, pausa o countdown na bancada e no barco, e bebe
 meads sozinha na hora da luta. Shift+T liga e desliga o auto-eat. Continua
 cozinhando e carregando comida — só para de esquecer de comer.
 
+Ao usar a fruta que provoca vômito, o auto-eat espera o efeito terminar antes
+de voltar a comer. Itens que provocam vômito não são escolhidos automaticamente.
+
 ## Language
 
 Follows the game language. English, both Portuguese variants, German, French,
@@ -82,3 +89,9 @@ Written on first run to `BepInEx/config/com.blackhearthx.hearthpantry.cfg`.
 Every habit has its own switch: auto-eat, slot fill, notifications, workbench
 and boat pause, meads, and the scoring weights used when the pantry chooses a
 new dish.
+
+Food scoring compares health, stamina, eitr, duration and regeneration on
+comparable scales. Set Eitr Weight to zero if you do not use magic. TimeControl
+slows the food countdown without slowing healing; renewal percentages still
+follow the meal's remaining duration. Existing extended timers from older
+versions return to the new behavior when that meal is eaten again.

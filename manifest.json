@@ -1,6 +1,6 @@
 {
   "name": "HearthPantry",
-  "version_number": "1.0.1",
+  "version_number": "1.0.3",
   "website_url": "https://github.com/BlackHearthx/HearthPantry",
   "description": "Your pantry keeps three meals running, fills empty slots, pauses timers at the workbench or on a boat, and drinks meads when a fight gets ugly.",
   "dependencies": [

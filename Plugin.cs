@@ -15,7 +15,7 @@ namespace HearthPantry
     {
         public const string PluginGUID = "com.blackhearthx.hearthpantry";
         public const string PluginName = "HearthPantry";
-        public const string PluginVersion = "1.0.1";
+        public const string PluginVersion = "1.0.3";
 
         internal static ManualLogSource Log { get; private set; }
 

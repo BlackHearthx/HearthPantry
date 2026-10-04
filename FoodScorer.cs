@@ -11,10 +11,10 @@ namespace HearthPantry
                 return 0f;
 
             var s = item.m_shared;
-            return s.m_food * PluginConfig.ScoreHealthWeight.Value
-                 + s.m_foodStamina * PluginConfig.ScoreStaminaWeight.Value
-                 + s.m_foodBurnTime * PluginConfig.ScoreDurationWeight.Value
-                 + s.m_foodRegen * PluginConfig.ScoreRegenWeight.Value;
+            return PantryPolicy.Score(s.m_food, s.m_foodStamina, s.m_foodBurnTime, s.m_foodRegen, s.m_foodEitr,
+                PluginConfig.ScoreHealthWeight.Value, PluginConfig.ScoreStaminaWeight.Value,
+                PluginConfig.ScoreDurationWeight.Value, PluginConfig.ScoreRegenWeight.Value,
+                PluginConfig.ScoreEitrWeight.Value);
         }
 
         public static ItemData PickBestFromInventory(Inventory inventory, HashSet<string> excludeNames)
@@ -33,6 +33,8 @@ namespace HearthPantry
             foreach (var item in consumables)
             {
                 if (item?.m_shared == null || item.m_shared.m_food <= 0f)
+                    continue;
+                if (item.m_shared.m_consumeStatusEffect is SE_Puke)
                     continue;
                 if (excludeNames != null && excludeNames.Contains(item.m_shared.m_name))
                     continue;

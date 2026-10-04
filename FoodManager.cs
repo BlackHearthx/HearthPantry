@@ -19,6 +19,7 @@ namespace HearthPantry
 
         private static bool _nearWorkbench;
         private static bool _onBoat;
+        private static Player _trackedPlayer;
 
         private static bool _foodRateResolved;
         private static AccessTools.FieldRef<float> _foodRateRef;
@@ -33,6 +34,12 @@ namespace HearthPantry
         public static void Tick()
         {
             var player = Player.m_localPlayer;
+            if (!ReferenceEquals(player, _trackedPlayer))
+            {
+                _trackedPlayer = player;
+                _expiryShown.Clear();
+                _lowSupplyShown.Clear();
+            }
             _nearWorkbench = PluginConfig.ModEnabled.Value
                              && player != null
                              && PluginConfig.PauseNearWorkbench.Value
@@ -45,33 +52,53 @@ namespace HearthPantry
             if (!PluginConfig.ModEnabled.Value || player == null)
                 return;
 
+            if (!CanAutomate(player))
+                return;
+
             if (!PluginConfig.AutoEat.Value && !PluginConfig.FillEmptySlots.Value && !PluginConfig.ExpiryNotify.Value)
                 return;
 
             CheckFoods(player);
         }
 
-        public static void OnFoodEaten(Player player, ItemData item)
+        internal static bool IsVomiting(Player player)
         {
-            if (!PluginConfig.ModEnabled.Value
-                || !PluginConfig.ScaleWithTimeControl.Value
-                || player != Player.m_localPlayer
-                || item?.m_shared == null)
-                return;
+            var effects = player?.GetSEMan()?.GetStatusEffects();
+            if (effects == null)
+                return false;
 
-            float mult = GetTimeControlMultiplier();
-            if (mult <= 0f || Mathf.Abs(mult - 1f) <= 0.001f)
-                return;
-
-            string name = item.m_shared.m_name;
-            foreach (var food in player.GetFoods())
+            // Check the effect type so renamed/modded puke effects are covered too.
+            foreach (var effect in effects)
             {
-                if (food?.m_item?.m_shared != null && food.m_item.m_shared.m_name == name)
-                {
-                    food.m_time = food.m_item.m_shared.m_foodBurnTime * mult;
-                    break;
-                }
+                if (effect is SE_Puke)
+                    return true;
             }
+
+            return false;
+        }
+
+        internal static bool CanAutomate(Player player)
+        {
+            return player != null && !player.IsDead() && !player.IsTeleporting()
+                && !player.InCutscene() && !IsVomiting(player);
+        }
+
+        internal static bool ShouldPauseTimers(Player player)
+        {
+            return PluginConfig.ModEnabled.Value && player == Player.m_localPlayer
+                && CanAutomate(player)
+                && ((PluginConfig.PauseOnBoat.Value && player.IsAttachedToShip())
+                    || (PluginConfig.PauseNearWorkbench.Value && _nearWorkbench));
+        }
+
+        internal static float ScaleFoodRate(float rate, Player player)
+        {
+            if (!PluginConfig.ModEnabled.Value || player != Player.m_localPlayer)
+                return rate;
+            if (ShouldPauseTimers(player))
+                return 0f;
+            return PantryPolicy.ScaleRate(rate,
+                PluginConfig.ScaleWithTimeControl.Value ? GetTimeControlMultiplier() : 1f);
         }
 
         public static List<Player.Food> CaptureFoodsForDeath(Player player)
@@ -145,7 +172,8 @@ namespace HearthPantry
                     continue;
 
                 var stack = inventory.GetItem(name, -1, false);
-                if (stack == null || !player.ConsumeItem(inventory, stack))
+                if (stack == null || stack.m_shared.m_consumeStatusEffect is SE_Puke
+                    || !player.ConsumeItem(inventory, stack))
                     continue;
 
                 _expiryShown.Remove(name);
@@ -164,9 +192,12 @@ namespace HearthPantry
             {
                 // Re-read after possible re-eats
                 foods = player.GetFoods();
-                while (foods != null && foods.Count < MaxFoodSlots)
+                int attempts = 0;
+                int maxAttempts = inventory.GetAllItems().Count;
+                var rejected = new HashSet<string>();
+                while (foods != null && foods.Count < MaxFoodSlots && attempts++ < maxAttempts)
                 {
-                    var exclude = new HashSet<string>();
+                    var exclude = new HashSet<string>(rejected);
                     foreach (var f in foods)
                     {
                         if (f?.m_item?.m_shared != null)
@@ -178,8 +209,18 @@ namespace HearthPantry
                         break;
 
                     string pickName = pick.m_shared.m_name;
+                    int previousCount = foods.Count;
                     if (!player.ConsumeItem(inventory, pick))
+                    {
+                        rejected.Add(pickName);
+                        continue;
+                    }
+
+                    foods = player.GetFoods();
+                    if (foods == null || foods.Count <= previousCount || IsVomiting(player))
                         break;
+
+                    _seenThisTick.Add(pickName);
 
                     if (PluginConfig.AutoEatNotify.Value)
                     {
@@ -254,7 +295,7 @@ namespace HearthPantry
 
             try
             {
-                float rate = _foodRateRef();
+                float rate = ScaleFoodRate(_foodRateRef(), Player.m_localPlayer);
                 return rate > 0f ? rate : 1f;
             }
             catch
@@ -295,7 +336,8 @@ namespace HearthPantry
 
             try
             {
-                return (float)_tcMultiplierGetter.Invoke(null, null);
+                float multiplier = (float)_tcMultiplierGetter.Invoke(null, null);
+                return PantryPolicy.ValidMultiplier(multiplier);
             }
             catch
             {

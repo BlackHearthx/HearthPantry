@@ -32,14 +32,18 @@ namespace HearthPantry
         {
             var loc = LocalizationManager.Instance.GetLocalization();
             var loaded = 0;
+            bool englishLoaded = false;
 
             foreach (var lang in Languages)
             {
                 if (TryLoad(loc, lang))
+                {
                     loaded++;
+                    if (lang == "English") englishLoaded = true;
+                }
             }
 
-            if (loaded == 0)
+            if (!englishLoaded)
             {
                 RegisterInlineEnglish(loc);
                 Jotunn.Logger.LogWarning("HearthPantry: Translations folder missing — English inline fallback");

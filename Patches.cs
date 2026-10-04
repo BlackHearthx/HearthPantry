@@ -1,25 +1,62 @@
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using HarmonyLib;
-using ItemData = ItemDrop.ItemData;
 
 namespace HearthPantry
 {
     [HarmonyPatch]
     internal static class Patches
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Player), nameof(Player.UpdateFood))]
-        private static void UpdateFood_Postfix(Player __instance)
-        {
-            if ((!FoodManager.NearWorkbench && !FoodManager.OnBoat) || __instance != Player.m_localPlayer)
-                return;
+        private static readonly System.Reflection.MethodInfo TotalFood = AccessTools.Method(typeof(Player), "GetTotalFoodValue");
 
-            float dt = UnityEngine.Time.deltaTime * GetFoodRateSafe();
-            foreach (var food in __instance.GetFoods())
+        [HarmonyTranspiler]
+        [HarmonyPatch(typeof(Player), "UpdateFood")]
+        private static IEnumerable<CodeInstruction> UpdateFood_Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var rate = AccessTools.Field(typeof(Game), "m_foodRate");
+            var scale = AccessTools.Method(typeof(FoodManager), nameof(FoodManager.ScaleFoodRate));
+            foreach (var instruction in instructions)
             {
-                if (food?.m_item != null)
-                    food.m_time += dt;
+                yield return instruction;
+                if (instruction.LoadsField(rate))
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Call, scale);
+                }
             }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), "UpdateFood")]
+        private static void UpdateFood_Prefix(Player __instance, out Dictionary<Player.Food, float> __state)
+        {
+            __state = null;
+            if (!FoodManager.ShouldPauseTimers(__instance)) return;
+            __state = new Dictionary<Player.Food, float>();
+            foreach (var food in __instance.GetFoods()) __state[food] = food.m_time;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Player), "UpdateFood")]
+        private static void UpdateFood_Postfix(Player __instance, Dictionary<Player.Food, float> __state)
+        {
+            if (__state == null) return;
+            var foods = __instance.GetFoods();
+            foreach (var entry in __state)
+            {
+                var food = entry.Key;
+                food.m_time = entry.Value;
+                if (!foods.Contains(food)) foods.Add(food);
+                float fraction = UnityEngine.Mathf.Pow(UnityEngine.Mathf.Clamp01(food.m_time / food.m_item.m_shared.m_foodBurnTime), 0.3f);
+                food.m_health = food.m_item.m_shared.m_food * fraction;
+                food.m_stamina = food.m_item.m_shared.m_foodStamina * fraction;
+                food.m_eitr = food.m_item.m_shared.m_foodEitr * fraction;
+            }
+            object[] values = { 0f, 0f, 0f };
+            TotalFood.Invoke(__instance, values);
+            __instance.SetMaxHealth((float)values[0], false);
+            __instance.SetMaxStamina((float)values[1], false);
+            __instance.SetMaxEitr((float)values[2], false);
         }
 
         [HarmonyPrefix]
@@ -36,39 +73,19 @@ namespace HearthPantry
             FoodManager.RestoreFoodsAfterDeath(__instance, __state);
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Player), nameof(Player.EatFood))]
-        private static void EatFood_Postfix(Player __instance, ItemData item, bool __result)
-        {
-            if (__result)
-                FoodManager.OnFoodEaten(__instance, item);
-        }
-
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Character), nameof(Character.RPC_Damage))]
-        private static void RPC_Damage_Prefix(Character __instance, HitData hit)
+        [HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
+        private static void ApplyDamage_Prefix(Character __instance, out float __state)
         {
-            MeadManager.OnDamage(__instance, hit);
+            __state = __instance == Player.m_localPlayer ? __instance.GetHealth() : float.NaN;
         }
 
-        private static float GetFoodRateSafe()
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Character), nameof(Character.ApplyDamage))]
+        private static void ApplyDamage_Postfix(Character __instance, HitData hit, float __state)
         {
-            // Match FoodManager: prefer Game.m_foodRate when present.
-            try
-            {
-                var field = AccessTools.Field(typeof(Game), "m_foodRate");
-                if (field != null)
-                {
-                    float rate = (float)field.GetValue(null);
-                    return rate > 0f ? rate : 1f;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-
-            return 1f;
+            if (__instance == Player.m_localPlayer && __instance.GetHealth() < __state)
+                MeadManager.OnDamage(__instance, hit);
         }
     }
 }

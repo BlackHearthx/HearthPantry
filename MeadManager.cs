@@ -12,26 +12,48 @@ namespace HearthPantry
         private static float _lastEnemyHitTime = float.MinValue;
         private static readonly Queue<float> _frostHitTimes = new Queue<float>();
         private static readonly List<Character> _nearby = new List<Character>();
-        private static readonly HashSet<string> _poisonPrefabs = new HashSet<string>();
-        private static readonly HashSet<string> _firePrefabs = new HashSet<string>();
-        private static readonly HashSet<string> _checkedPrefabs = new HashSet<string>();
+        private static Player _trackedPlayer;
+
+        private static void RefreshState()
+        {
+            var player = Player.m_localPlayer;
+            if (!ReferenceEquals(player, _trackedPlayer) || !PluginConfig.ModEnabled.Value
+                || !FoodManager.CanAutomate(player))
+            {
+                _trackedPlayer = player;
+                _lastEnemyHitTime = float.MinValue;
+                _frostHitTimes.Clear();
+            }
+            float cutoff = Time.time - PluginConfig.FrostMeadTickWindow.Value;
+            while (_frostHitTimes.Count > 0 && _frostHitTimes.Peek() < cutoff)
+                _frostHitTimes.Dequeue();
+            if (!PluginConfig.AutoFrostMead.Value)
+                _frostHitTimes.Clear();
+        }
 
         public static void OnDamage(Character character, HitData hit)
         {
             if (character != Player.m_localPlayer || hit == null)
                 return;
-
+            RefreshState();
+            if (!PluginConfig.ModEnabled.Value || !FoodManager.CanAutomate(Player.m_localPlayer))
+                return;
             var attacker = hit.GetAttacker();
-            if (attacker != null && !attacker.IsPlayer())
+            if (attacker != null && !attacker.IsPlayer() && BaseAI.IsEnemy(attacker, character))
                 _lastEnemyHitTime = Time.time;
 
-            if (hit.m_damage.m_frost > 0f)
+            if (PluginConfig.AutoFrostMead.Value && hit.m_damage.m_frost > 0f)
+            {
                 _frostHitTimes.Enqueue(Time.time);
+                while (_frostHitTimes.Count > PluginConfig.FrostMeadTickCount.Value)
+                    _frostHitTimes.Dequeue();
+            }
         }
 
         public static void Tick()
         {
-            if (!PluginConfig.ModEnabled.Value)
+            RefreshState();
+            if (!PluginConfig.ModEnabled.Value || !FoodManager.CanAutomate(Player.m_localPlayer))
                 return;
 
             CheckHealthMead();
@@ -62,7 +84,7 @@ namespace HearthPantry
             foreach (var mead in GetHealthMeads(inventory))
             {
                 var se = mead.m_shared.m_consumeStatusEffect;
-                if (se != null && seman.HaveStatusEffect(se.NameHash()))
+                if (EffectAlreadyActive(seman, se))
                     continue;
 
                 if (PluginConfig.HealthMeadRequireMaxHealth.Value
@@ -113,12 +135,11 @@ namespace HearthPantry
                 if (!IsThreatening(c, player, distSq))
                     continue;
 
-                string prefab = PrefabName(c);
-                EnsureCached(prefab, c);
+                GetThreatDamage(c, out bool poison, out bool fire);
 
-                if (wantPoison && !needPoison && distSq <= poisonRangeSq && _poisonPrefabs.Contains(prefab))
+                if (wantPoison && !needPoison && distSq <= poisonRangeSq && poison)
                     needPoison = true;
-                if (wantFire && !needFire && distSq <= fireRangeSq && _firePrefabs.Contains(prefab))
+                if (wantFire && !needFire && distSq <= fireRangeSq && fire)
                     needFire = true;
 
                 if (needPoison && needFire)
@@ -154,7 +175,7 @@ namespace HearthPantry
             foreach (var mead in GetResistMeads(inventory, HitData.DamageType.Frost))
             {
                 var se = mead.m_shared.m_consumeStatusEffect;
-                if (se != null && seman.HaveStatusEffect(se.NameHash()))
+                if (EffectAlreadyActive(seman, se))
                 {
                     _frostHitTimes.Clear();
                     break;
@@ -178,7 +199,7 @@ namespace HearthPantry
             foreach (var mead in GetResistMeads(inventory, type))
             {
                 var se = mead.m_shared.m_consumeStatusEffect;
-                if (se != null && seman.HaveStatusEffect(se.NameHash()))
+                if (EffectAlreadyActive(seman, se))
                     break;
 
                 if (!player.ConsumeItem(inventory, mead))
@@ -192,6 +213,8 @@ namespace HearthPantry
 
         private static bool IsThreatening(Character c, Player localPlayer, float distSq)
         {
+            if (!BaseAI.IsEnemy(c, localPlayer))
+                return false;
             if (distSq <= MeleeRangeSq)
                 return true;
 
@@ -202,40 +225,39 @@ namespace HearthPantry
             return false;
         }
 
-        private static string PrefabName(Character c)
+        private static bool EffectAlreadyActive(SEMan seman, StatusEffect effect)
         {
-            return c.gameObject.name.Replace("(Clone)", "").Trim();
+            return effect != null && (seman.HaveStatusEffect(effect.NameHash())
+                || (!string.IsNullOrEmpty(effect.m_category) && seman.HaveStatusEffectCategory(effect.m_category)));
         }
 
-        private static void EnsureCached(string prefab, Character c)
+        private static void GetThreatDamage(Character c, out bool poison, out bool fire)
         {
-            if (_checkedPrefabs.Contains(prefab))
-                return;
+            poison = false;
+            fire = false;
 
             if (!(c is Humanoid humanoid))
             {
-                _checkedPrefabs.Add(prefab);
                 return;
             }
 
             foreach (var item in humanoid.GetInventory().GetAllItems())
             {
                 if (item.m_shared.m_damages.m_poison > 0f)
-                    _poisonPrefabs.Add(prefab);
+                    poison = true;
                 if (item.m_shared.m_damages.m_fire > 0f)
-                    _firePrefabs.Add(prefab);
+                    fire = true;
             }
 
             var weapon = humanoid.GetCurrentWeapon();
             if (weapon != null)
             {
                 if (weapon.m_shared.m_damages.m_poison > 0f)
-                    _poisonPrefabs.Add(prefab);
+                    poison = true;
                 if (weapon.m_shared.m_damages.m_fire > 0f)
-                    _firePrefabs.Add(prefab);
+                    fire = true;
             }
 
-            _checkedPrefabs.Add(prefab);
         }
 
         private static List<ItemData> GetHealthMeads(Inventory inventory)
@@ -244,6 +266,8 @@ namespace HearthPantry
             foreach (var item in inventory.GetAllItems())
             {
                 if (item.m_shared.m_itemType != ItemData.ItemType.Consumable)
+                    continue;
+                if (item.m_shared.m_consumeStatusEffect is SE_Puke)
                     continue;
                 if (item.m_shared.m_consumeStatusEffect is SE_Stats stats && stats.m_healthOverTime > 0f)
                     list.Add(item);
@@ -265,12 +289,14 @@ namespace HearthPantry
             {
                 if (item.m_shared.m_itemType != ItemData.ItemType.Consumable)
                     continue;
+                if (item.m_shared.m_consumeStatusEffect is SE_Puke)
+                    continue;
                 if (!(item.m_shared.m_consumeStatusEffect is SE_Stats stats))
                     continue;
 
                 foreach (var mod in stats.m_mods)
                 {
-                    if (mod.m_type == type && mod.m_modifier != HitData.DamageModifier.Normal)
+                    if (mod.m_type == type && IsProtective(mod.m_modifier))
                     {
                         list.Add(item);
                         break;
@@ -279,6 +305,14 @@ namespace HearthPantry
             }
 
             return list;
+        }
+
+        internal static bool IsProtective(HitData.DamageModifier modifier)
+        {
+            return modifier == HitData.DamageModifier.Resistant
+                || modifier == HitData.DamageModifier.VeryResistant
+                || modifier == HitData.DamageModifier.SlightlyResistant
+                || modifier == HitData.DamageModifier.Immune;
         }
 
         private static string Localized(ItemData item)
