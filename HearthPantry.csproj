@@ -13,9 +13,9 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <DebugType>portable</DebugType>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Authors>blackhearthx</Authors>
-    <Description>Smart homestead pantry: auto-refill food, fill empty slots, workbench/boat pause, and fight meads.</Description>
+    <Description>Renews your manually chosen active meals, pauses food timers at the workbench or on a boat, and handles fight meads.</Description>
   </PropertyGroup>
 
   <ItemGroup>

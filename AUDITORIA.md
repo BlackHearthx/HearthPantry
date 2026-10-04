@@ -9,6 +9,12 @@ Atualização: os problemas e limitações abaixo foram tratados na versão 1.0.
 Este documento preserva os achados originais. A validação automatizada não
 substitui os cenários de aceitação dentro do jogo descritos ao final.
 
+Na versão 1.0.4, a seleção e o preenchimento automáticos foram removidos:
+o jogador escolhe as refeições e o mod apenas renova a mesma comida ativa.
+Também foi corrigida a chamada direta ao método privado Player.SetMaxEitr,
+apontada pelo log de execução da versão 1.0.3. Os acessos diretos às APIs do
+jogo foram verificados contra os níveis de acesso reais da instalação local.
+
 ## Problemas prioritários
 
 ### 1. Hidroméis podem ser consumidos durante morte ou teleporte

@@ -10,7 +10,6 @@ namespace HearthPantry
 {
     internal static class FoodManager
     {
-        private const int MaxFoodSlots = 3;
         private const float WorkbenchRange = 20f;
 
         private static readonly HashSet<string> _expiryShown = new HashSet<string>();
@@ -55,7 +54,7 @@ namespace HearthPantry
             if (!CanAutomate(player))
                 return;
 
-            if (!PluginConfig.AutoEat.Value && !PluginConfig.FillEmptySlots.Value && !PluginConfig.ExpiryNotify.Value)
+            if (!PluginConfig.AutoEat.Value && !PluginConfig.ExpiryNotify.Value)
                 return;
 
             CheckFoods(player);
@@ -185,52 +184,6 @@ namespace HearthPantry
                 }
 
                 MaybeLowSupply(inventory, name);
-            }
-
-            // 2) Fill empty slots with scored inventory food
-            if (PluginConfig.AutoEat.Value && PluginConfig.FillEmptySlots.Value)
-            {
-                // Re-read after possible re-eats
-                foods = player.GetFoods();
-                int attempts = 0;
-                int maxAttempts = inventory.GetAllItems().Count;
-                var rejected = new HashSet<string>();
-                while (foods != null && foods.Count < MaxFoodSlots && attempts++ < maxAttempts)
-                {
-                    var exclude = new HashSet<string>(rejected);
-                    foreach (var f in foods)
-                    {
-                        if (f?.m_item?.m_shared != null)
-                            exclude.Add(f.m_item.m_shared.m_name);
-                    }
-
-                    var pick = FoodScorer.PickBestFromInventory(inventory, exclude);
-                    if (pick == null)
-                        break;
-
-                    string pickName = pick.m_shared.m_name;
-                    int previousCount = foods.Count;
-                    if (!player.ConsumeItem(inventory, pick))
-                    {
-                        rejected.Add(pickName);
-                        continue;
-                    }
-
-                    foods = player.GetFoods();
-                    if (foods == null || foods.Count <= previousCount || IsVomiting(player))
-                        break;
-
-                    _seenThisTick.Add(pickName);
-
-                    if (PluginConfig.AutoEatNotify.Value)
-                    {
-                        string label = Localization.instance.Localize(pickName);
-                        ShowHud(ModLocalization.L("hearthpantry_ate_fill", label));
-                    }
-
-                    MaybeLowSupply(inventory, pickName);
-                    foods = player.GetFoods();
-                }
             }
 
             _expiryShown.RemoveWhere(n => !_seenThisTick.Contains(n));

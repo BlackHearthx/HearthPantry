@@ -1,97 +1,73 @@
 # Hearth Pantry
 
-Never miss a meal at the homestead.
+Your meals, your choice. **By BlackHearthx.**
 
-**By BlackHearthx.**
+Eat the food you want by hand. Hearth Pantry watches those active meals and
+re-eats the same dish from your bag when its timer drops near half (45% by
+default). It never chooses a new food or fills an empty slot. If a meal expires
+completely, you choose what to eat next.
 
-Your bag already holds the food. Hearth Pantry just keeps an eye on the three
-meals in your belly the way a good pantry should: when a buff starts to fade,
-it reaches for another of the same dish; when a seat at the table is empty, it
-picks something sensible from what you are carrying; and when a fight turns
-ugly, it drinks the mead you packed for that moment.
+Bukeperries leave you free to change your meals: the pantry pauses during
+vomiting, and the emptied slots stay empty afterward. Eat your new choices
+manually and the pantry will maintain those meals.
 
-You still cook. You still loot. You just stop dying because you forgot to chew.
+A short message tells you when it re-eats a dish, when a meal is fading, and
+when your supply is running low. At a nearby workbench or on a boat, food
+timers pause while healing keeps working.
 
-## What you get
+Health and resistance meads can still drink themselves when needed. Healing
+normally requires low health after actual enemy damage; resistance reacts to
+hostile fire/poison threats, freezing or repeated frost damage. Death,
+teleporting, cutscenes and vomiting pause automatic consumption.
 
-The pantry re-eats a meal once the timer drops near half (default is 45%, right
-as the icon is flashing and the health/stamina from that food has already started
-to slip). If you are walking around with fewer than three foods active, it fills
-the gap with the best match from your inventory. A short line on screen tells
-you when it ate, when a dish is running low, and when the stack in your bag is
-almost gone.
-
-Auto-eating pauses while vomiting (for example after eating Bukeperries), then
-resumes when the effect ends. The pantry never automatically selects food that
-applies a vomiting effect.
-
-At the workbench and on a boat the countdown holds still so crafting and sailing
-do not burn through dinner. Healing and stamina from the meal keep working;
-only the timer pauses.
-
-Health meads and resist meads drink themselves when you need them in a fight —
-low health after an enemy hit, poison or fire closing in, frost biting or the
-mountain freezing you. Shift+T pauses the whole auto-eat habit if you want the
-table quiet for a while.
-
-## Your first session
-
-1. Pack the meals you actually want to run, plus a spare or two of each.
-2. Eat as usual until you have one, two, or three foods going.
-3. Play. When a dish flashes, the pantry should finish the thought for you.
-4. Bring meads if you are headed into a fight; leave health mead for combat so
-   a clumsy fall does not drink the bottle.
-5. Sit at a workbench or hop on a ship and watch the timers hold.
-
-## Controls at a glance
+## Controls
 
 | Key | What it does |
 | --- | --- |
-| Shift+T | Pause or resume auto-eating (and filling empty slots) |
+| Shift+T | Pause or resume automatic renewal of active meals |
 
-Everything else is in the config file and can be tuned or turned off.
+Choose your meals manually, carry spare portions of those dishes, and the
+pantry takes care of renewal. An empty belly stays empty until you eat.
 
-## Compat and notes
+## Compatibility
 
-Needs BepInEx and Jötunn. Soft support for DrummerCraig's TimeControl: if that
-mod is lengthening the day, food lasts with it. Keep Food On Death is available
-but off by default.
+Needs BepInEx and Jotunn. With DrummerCraig's TimeControl, food decay follows
+its day multiplier without slowing healing. Renewal percentages remain
+consistent. Extended food timers from older versions adopt the new behavior
+when that meal is eaten again.
 
-Do not run this beside Hunger Pangs or Glutton — they all touch the same food
-loop and will fight each other.
+Keep Food On Death is available but off by default. Do not run this alongside
+Hunger Pangs or Glutton, which also change food consumption and timers.
 
 ## Como usar (PT-BR)
 
-A despensa cuida das três comidas ativas: recome a mesma quando o timer chega
-perto da metade, preenche slot vazio com o que tiver de melhor na bolsa, avisa
-quando o estoque está baixo, pausa o countdown na bancada e no barco, e bebe
-meads sozinha na hora da luta. Shift+T liga e desliga o auto-eat. Continua
-cozinhando e carregando comida — só para de esquecer de comer.
+Você escolhe e come cada comida manualmente. A despensa só recome a mesma
+comida enquanto ela ainda está ativa, quando o tempo restante chega perto
+ de 45%. Ela não escolhe comida nova e não preenche espaços vazios.
 
-Ao usar a fruta que provoca vômito, o auto-eat espera o efeito terminar antes
-de voltar a comer. Itens que provocam vômito não são escolhidos automaticamente.
+Depois de vomitar, os espaços ficam vazios até você escolher e comer de novo.
+Se uma comida acabar completamente, você também escolhe a próxima. Carregue
+porções extras das comidas escolhidas para o mod renovar essas refeições.
+Shift+T pausa ou retoma essa renovação.
+
+A pausa dos timers na bancada e no barco, os avisos de estoque e os hidroméis
+automáticos continuam disponíveis nas configurações.
 
 ## Language
 
 Follows the game language. English, both Portuguese variants, German, French,
 Spanish, Russian, Polish, Dutch, Italian, Swedish, Turkish, Ukrainian, Chinese
-(simplified and traditional), Japanese and Korean ship with the mod. To tweak a
-line, edit `Translations/<Language>/hearthpantry.json` next to the DLL.
+(simplified and traditional), Japanese and Korean ship with the mod. To change
+a message, edit `Translations/<Language>/hearthpantry.json` next to the DLL.
 
 ## Requirements
 
 - [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/)
-- [Jötunn](https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/)
+- [Jotunn](https://thunderstore.io/c/valheim/p/ValheimModding/Jotunn/)
 
 ## Config
 
 Written on first run to `BepInEx/config/com.blackhearthx.hearthpantry.cfg`.
-Every habit has its own switch: auto-eat, slot fill, notifications, workbench
-and boat pause, meads, and the scoring weights used when the pantry chooses a
-new dish.
-
-Food scoring compares health, stamina, eitr, duration and regeneration on
-comparable scales. Set Eitr Weight to zero if you do not use magic. TimeControl
-slows the food countdown without slowing healing; renewal percentages still
-follow the meal's remaining duration. Existing extended timers from older
-versions return to the new behavior when that meal is eaten again.
+Configure renewal, notifications, timer pauses, meads and the hotkey there.
+Old Fill Empty Slots, Eat Best Foods First and Pantry Scoring settings are
+ignored in version 1.0.4 and later.

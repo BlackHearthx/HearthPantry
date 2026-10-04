@@ -1,8 +1,8 @@
 {
   "name": "HearthPantry",
-  "version_number": "1.0.3",
+  "version_number": "1.0.4",
   "website_url": "https://github.com/BlackHearthx/HearthPantry",
-  "description": "Your pantry keeps three meals running, fills empty slots, pauses timers at the workbench or on a boat, and drinks meads when a fight gets ugly.",
+  "description": "You choose your meals; the pantry re-eats the same active foods, pauses timers at a workbench or on a boat, and drinks meads when needed.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2200",
     "ValheimModding-Jotunn-2.29.2"

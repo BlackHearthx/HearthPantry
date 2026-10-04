@@ -9,8 +9,6 @@ namespace HearthPantry
         public static ConfigEntry<bool> AutoEat;
         public static ConfigEntry<int> AutoEatPercent;
         public static ConfigEntry<bool> AutoEatNotify;
-        public static ConfigEntry<bool> FillEmptySlots;
-        public static ConfigEntry<bool> EatBestFirst;
         public static ConfigEntry<bool> ExpiryNotify;
         public static ConfigEntry<int> ExpiryPercent;
         public static ConfigEntry<bool> LowSupplyNotify;
@@ -21,11 +19,6 @@ namespace HearthPantry
         public static ConfigEntry<bool> ScaleWithTimeControl;
         public static ConfigEntry<KeyboardShortcut> ToggleHotkey;
 
-        public static ConfigEntry<int> ScoreHealthWeight;
-        public static ConfigEntry<int> ScoreStaminaWeight;
-        public static ConfigEntry<int> ScoreDurationWeight;
-        public static ConfigEntry<int> ScoreRegenWeight;
-        public static ConfigEntry<int> ScoreEitrWeight;
 
         public static ConfigEntry<bool> AutoHealthMead;
         public static ConfigEntry<int> HealthMeadThreshold;
@@ -59,10 +52,6 @@ namespace HearthPantry
                     new AcceptableValueRange<int>(1, 49)));
             AutoEatNotify = config.Bind("General", "04. Auto-Eat Notify", true,
                 "Shows a short line on screen when the pantry eats for you.");
-            FillEmptySlots = config.Bind("General", "05. Fill Empty Slots", true,
-                "If you have fewer than three meals going, picks something good from your inventory and fills the gap.");
-            EatBestFirst = config.Bind("General", "06. Eat Best Foods First", true,
-                "When filling empty slots, take the strongest food first. Turn this off if you want to save the good stuff and burn the weak meals.");
             ExpiryNotify = config.Bind("General", "07. Expiry Notify", true,
                 "A quiet heads-up when a meal is getting thin, even if you prefer to eat by hand.");
             ExpiryPercent = config.Bind("General", "08. Expiry Percent", 50,
@@ -84,17 +73,6 @@ namespace HearthPantry
             ToggleHotkey = config.Bind("General", "15. Toggle Hotkey",
                 new KeyboardShortcut(KeyCode.T, KeyCode.LeftShift),
                 "Quick key to pause or resume the pantry without opening the config.");
-
-            ScoreHealthWeight = config.Bind("Pantry Scoring", "01. Health Weight", 50,
-                new ConfigDescription("How much health matters when the pantry chooses a meal for an empty slot.", new AcceptableValueRange<int>(0, 100)));
-            ScoreStaminaWeight = config.Bind("Pantry Scoring", "02. Stamina Weight", 50,
-                new ConfigDescription("How much stamina matters in that choice.", new AcceptableValueRange<int>(0, 100)));
-            ScoreDurationWeight = config.Bind("Pantry Scoring", "03. Duration Weight", 50,
-                new ConfigDescription("How much long burn time matters.", new AcceptableValueRange<int>(0, 100)));
-            ScoreRegenWeight = config.Bind("Pantry Scoring", "04. Regen Weight", 50,
-                new ConfigDescription("How much regen matters.", new AcceptableValueRange<int>(0, 100)));
-            ScoreEitrWeight = config.Bind("Pantry Scoring", "05. Eitr Weight", 50,
-                new ConfigDescription("How much eitr matters when choosing a meal. Set to zero if you do not use magic.", new AcceptableValueRange<int>(0, 100)));
 
             AutoHealthMead = config.Bind("Health Mead", "01. Auto Health Mead", true,
                 "Drinks a healing mead when you are hurt badly enough.");

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.4
+
+You choose every meal yourself. The pantry only re-eats the same food while it
+is still active and nearing the configured renewal threshold. Empty slots stay
+empty, including after vomiting or death. Automatic slot filling and food
+scoring have been removed; old Fill Empty Slots settings no longer apply.
+The workbench/boat pause also fixes the private SetMaxEitr access that caused
+repeated MethodAccessException errors in version 1.0.3.
+
 ## 1.0.3
 
 The pantry now leaves your supplies alone during death, teleporting, cutscenes

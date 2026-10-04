@@ -8,6 +8,9 @@ namespace HearthPantry
     internal static class Patches
     {
         private static readonly System.Reflection.MethodInfo TotalFood = AccessTools.Method(typeof(Player), "GetTotalFoodValue");
+        // SetMaxEitr is private in the game, even though build references expose it.
+        private static readonly System.Reflection.MethodInfo SetMaxEitr =
+            AccessTools.Method(typeof(Player), "SetMaxEitr", new[] { typeof(float), typeof(bool) });
 
         [HarmonyTranspiler]
         [HarmonyPatch(typeof(Player), "UpdateFood")]
@@ -56,7 +59,7 @@ namespace HearthPantry
             TotalFood.Invoke(__instance, values);
             __instance.SetMaxHealth((float)values[0], false);
             __instance.SetMaxStamina((float)values[1], false);
-            __instance.SetMaxEitr((float)values[2], false);
+            SetMaxEitr.Invoke(__instance, new object[] { values[2], false });
         }
 
         [HarmonyPrefix]
